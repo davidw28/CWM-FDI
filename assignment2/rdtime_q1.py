@@ -39,17 +39,15 @@ def get_min_time_diff(num,filename):
 	if num < 2:
         	raise ValueError("num must be at least 2")
 
+	prev = time.perf_counter_ns()
 	min_diff = None
 	diff=[0]*num
-	
-	prev = time.perf_counter_ns()
 	for i in range(num - 1):
 		curr = time.perf_counter_ns()
 		diff[i] = curr - prev
 		if min_diff is None or diff[i] < min_diff:
 			min_diff = diff[i]
 		prev = curr
-	
 	write_list_to_file(diff,filename)
 	return min_diff
 
@@ -58,7 +56,18 @@ def get_min_time_diff(num,filename):
 if __name__ == "__main__":
 	filename = "time_py.txt"
 	num = 1000000
+	
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
+	print(f"CPU time diff: {get_cpu_time_diff()} ns")
 
     # Uncomment the lines below to run multiple measurement iterations
-	min_diff=get_min_time_diff(num,filename)
-	print(f"CPU min diff time: {min_diff} ns")
+	#min_diff=get_min_time_diff(num,filename)
+	#print(f"CPU min diff time: {min_diff} ns")
