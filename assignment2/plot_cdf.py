@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 
 # parameters to modify 
-filename="time_c_q5.txt"
-label = 'C'
+filename="time_py_q2.txt"
+label = 'Python'
 xlabel = 'Time (ns)'
 ylabel = 'CDF'
 title='CDF'
-fig_name='my_graph_cdf_q5.png'
+fig_name='my_graph_cdf_q2.png'
 bins=100 #adjust the number of bins to your plot
 
 ## load data from input file

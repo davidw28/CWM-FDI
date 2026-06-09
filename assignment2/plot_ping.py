@@ -2,25 +2,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # parameters to modify 
-filename="time_c_q5.txt"
-label = 'C'
-xlabel = 'Time (ns)'
+filename="ping001.txt"
+label = 'Ping self'
+xlabel = 'Time (ms)'
 ylabel = 'CDF'
 title='CDF'
-fig_name='my_graph_cdf_q5.png'
+fig_name='my_graph_cdf_ping001.png'
 bins=100 #adjust the number of bins to your plot
 
 ## load data from input file
 t = np.loadtxt(filename, delimiter=" ", dtype="float")
 
-print(f"Minimum: {np.min(t)} (ns)")
-print(f"Median: {np.median(t)} (ns)")
-print(f"90th pct: {np.percentile(t,90)} (ns)")
-print(f"99th pct: {np.percentile(t,99)} (ns)")
-print(f"Maximum: {np.max(t)} (ns)")
-print(f"Mean: {np.mean(t)} (ns)")
+print(f"Minimum: {np.min(t)} (ms)")
+print(f"Median: {np.median(t)} (ms)")
+print(f"90th pct: {np.percentile(t,90)} (ms)")
+print(f"99th pct: {np.percentile(t,99)} (ms)")
+print(f"Maximum: {np.max(t)} (ms)")
+print(f"Mean: {np.mean(t)} (ms)")
 
 ## if your data is "X Y" (2 cols), use the following line
 #plt.plot(t[:,0], t[:,1], label=label)  # Plot some data on the (implicit) axes.
