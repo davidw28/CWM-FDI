@@ -1,11 +1,39 @@
 import subprocess
 
-PY_PATH = "../../assignment1/matmul_fast.py"
-VENV_PATH = "/home/ubuntu/CWM-FDI/assignment6/.venv"
-# OUT_PATH = "./data/myturbostat.log"
+def call_python(py_path, turbostat = False, stdout = True, stderr = False):
+    cmd = f"{PYTHON3} {py_path}"
+    if turbostat:
+        cmd = "sudo turbostat -q -S --Joules --show Pkg_J " + cmd
+        
+    result = subprocess.run(cmd.split(" "), capture_output = True, text = True)
+    
+    if stdout:
+        print(result.stdout.strip())
+        
+    if stderr:
+        print(result.stderr.strip())
+        
+    return result
 
-cmd = f"{VENV_PATH}/bin/python3 run_model.py"
+def extract_time_energy(turbostat_result):
+    """turbostat_result.stderr is in the form '1.331949 sec\nPkg_J\n30.90\n'"""
+    lines = turbostat_result.stderr.strip().split()
+    ## This should be in the form ['1.203377', 'sec', 'Pkg_J', '17.68']
+    
+    assert len(lines) == 4
+    assert lines[1] == 'sec'
+    assert lines[2] == 'Pkg_J'
+    
+    time = float(lines[0])
+    energy = float(lines[3])
+    
+    return time, energy
+    
+PYTHON3 = "/home/ubuntu/CWM-FDI/assignment6/.venv/bin/python3"
 
-result = subprocess.run(cmd.split(" "), capture_output = True, text = True)
-print("Complete")
-print(result.stderr)
+OUT_DIR = "data/"
+
+_ = call_python("split_data.py")
+result = call_python("run_model.py", turbostat = True)
+time, energy = extract_time_energy(result)
+print(f"Time={time} s Energy={energy} J")

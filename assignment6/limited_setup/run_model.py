@@ -38,7 +38,7 @@ def calc(model, data, feature_labels, target_label):
 
 pred = calc(model, data, FEATURE_LABELS, TARGET_LABEL)
 
-## Plot results, not in separate script for now
-import plotly.express as px
-fig = px.scatter(pred, x = 'actual', y = 'predicted')
-fig.show()
+### Plot results, not in separate script for now
+# import plotly.express as px
+# fig = px.scatter(pred, x = 'actual', y = 'predicted')
+# fig.show()
