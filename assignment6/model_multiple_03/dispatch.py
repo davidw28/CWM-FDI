@@ -47,24 +47,25 @@ def extract_result(result):
 
     return time, energy, time_py, rmse, pearsonr
 
-def measure_model(train_path, test_path, model_path):
+def measure_model(train_path, test_path, model_name):
+    model_path = f"models/{model_name}.pkl"
     results = {}
     
-    print("===TRAINING MODEL===")
+    print(f"===TRAINING {model_name.upper()}===")
     result = call_python(f"train_model.py {train_path} {model_path}", turbostat = True)
     time, energy, time_py, _, _ = extract_result(result)
     results["Training"] = (energy, time_py)
     print(f"Energy={energy} J Time={time} s Time_py={time_py} s")
     print()
     
-    print("===CALLING MODEL (TRAIN) ===")
+    print(f"===CALLING {model_name.upper()} (TRAIN) ===")
     result = call_python(f"call_model_batch.py {train_path} {model_path}", turbostat = True)
     time, energy, time_py, rmse, pearsonr = extract_result(result)
     results["Calling (train)"] = (energy, time_py, rmse, pearsonr)
     print(f"Energy={energy} J Time={time} s Time_py={time_py} s RMSE={rmse} PearsonR={pearsonr}")
     print()
-    
-    print("===CALLING MODEL (TEST)===")
+
+    print(f"===CALLING {model_name.upper()} (TEST) ===")
     result = call_python(f"call_model_batch.py {test_path} {model_path}", turbostat = True)
     time, energy, time_py, rmse, pearsonr = extract_result(result)
     results["Calling (test)"] = (energy, time_py, rmse, pearsonr)
@@ -83,7 +84,11 @@ TRAIN_PATH = "data/wine_train.csv"
 TEST_PATH = "data/wine_test.csv"
 _ = call_python(f"split_wine_data.py {TRAIN_PATH} {TEST_PATH}")
 
-MODEL_PATH = "models/model_1.pkl"
+model_names = (
+    "model01",
+    "model02",
+)
 
-results = measure_model(TRAIN_PATH, TEST_PATH, MODEL_PATH)
-write_results(results, "results/wine_model.txt")
+for model_name in model_names:
+    results = measure_model(TRAIN_PATH, TEST_PATH, model_name)
+    write_results(results, "results/wine_{model_name}.txt")
