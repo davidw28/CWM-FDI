@@ -1,0 +1,1 @@
+{'target': 'pH', 'features': ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'total sulfur dioxide', 'density', 'free sulfur dioxide', 'alcohol', 'quality', 'sulphates'], 'instances': 4898}

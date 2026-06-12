@@ -1,18 +1,23 @@
+import scipy.stats
+import numpy as np
+
 import sys
 import time
 import pickle
 import pandas as pd
-import numpy as np
-import scipy.stats
 
 ## Load names
-assert len(sys.argv) == 3
+assert len(sys.argv) == 5
 IN_PATH = sys.argv[1]
 MODEL_PATH = sys.argv[2]
+DATASET = sys.argv[3]
+FEATURE_PATH = sys.argv[4]
 
-## Hard code parameters
-TARGET_LABEL = "pH"
-FEATURE_LABELS = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar','chlorides', 'total sulfur dioxide', 'density', 'free sulfur dioxide', 'alcohol', "quality", 'sulphates']
+## Load data
+with open(FEATURE_PATH, "r") as f:
+    FEATURE_INFO = eval(f.read())
+    TARGET_LABEL = FEATURE_INFO["target"]
+    FEATURE_LABELS = FEATURE_INFO["features"]
 
 ## Load data
 data = pd.read_csv(IN_PATH)

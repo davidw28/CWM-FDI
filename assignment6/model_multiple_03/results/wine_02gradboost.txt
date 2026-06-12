@@ -1,0 +1,1 @@
+{'Training': {'Energy (J)': 22.47, 'Time (s)': 0.500934}, 'Calling (train)': {'Energy (J)': 17.0, 'Time (s)': 0.014121, 'RMSE': 0.0963, 'PearsonR': 0.799}, 'Calling (test)': {'Energy (J)': 16.71, 'Time (s)': 0.010039, 'RMSE': 0.1041, 'PearsonR': 0.753}, 'Calling (sample)': {'Energy (J)': 16.99, 'Time (s)': 0.010043, 'RMSE': 0.0954, 'PearsonR': 0.796}}

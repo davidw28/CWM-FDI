@@ -7,9 +7,9 @@ SAMPLE_PATH = sys.argv[3]
 FEATURE_PATH = sys.argv[4]
 
 ## Hardcode
-IN_PATH = "../datasets/wine_quality.csv"
-IN_SEP = ";"
-IN_DECIMAL = ","
+IN_PATH = "../datasets/accelerometer.csv"
+IN_SEP = ","
+IN_DECIMAL = "."
 TEST_FRACTION = 0.2 # train/test split
 
 ## Load data
@@ -30,8 +30,8 @@ sample.to_csv(SAMPLE_PATH, index = False)
 
 ## Save targets/features
 FEATURE_INFO = {
-    "target": "pH",
-    "features": ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar','chlorides', 'total sulfur dioxide', 'density', 'free sulfur dioxide', 'alcohol', "quality", 'sulphates'],
+    "target": "pctid",
+    "features": ["wconfid", "x", "y", "z"],
     "instances": len(df)
 }
 with open(FEATURE_PATH, "w") as f:
