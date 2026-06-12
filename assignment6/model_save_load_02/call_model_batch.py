@@ -21,10 +21,15 @@ with open(MODEL_PATH, "rb") as f:
 ## Evaluate model
 import numpy as np
 import scipy.stats
+import time
 
 def calc(model, data, feature_labels, target_label):    
     data['actual'] = data[target_label]
+
+    start = time.time()
     data['predicted'] = model.predict(data[feature_labels])
+    elapsed = time.time() - start
+    print(f"Time={elapsed:.6f} s")
     
     data['error'] = data['predicted'] - data['actual']
 

@@ -1,21 +1,25 @@
-import pandas as pd
-import sklearn.model_selection
+## Load names
+import sys
+assert len(sys.argv) == 3
+TRAIN_PATH = sys.argv[1]
+TEST_PATH = sys.argv[2]
 
+## Hardcode
 IN_PATH = "../datasets/wine_quality.csv"
 IN_SEP = ";"
 IN_DECIMAL = ","
-
 TEST_FRACTION = 0.2 # train/test split
-NAME = "wine"
-OUT_PATH = "data/"
 
+## Load data
+import pandas as pd
 df = pd.read_csv(IN_PATH, sep = IN_SEP, decimal = IN_DECIMAL)
 df = df.dropna()
 df = df.astype('float')
 
+## Split data
+import sklearn.model_selection
 train, test = sklearn.model_selection.train_test_split(df, test_size = TEST_FRACTION)
-train.to_csv(OUT_PATH + NAME + "_train.csv", index = False)
-test.to_csv(OUT_PATH + NAME + "_test.csv", index = False)
 
-### Code for other potential versions
-# batch = df.sample(100)
+## Save files
+train.to_csv(TRAIN_PATH, index = False)
+test.to_csv(TEST_PATH, index = False)

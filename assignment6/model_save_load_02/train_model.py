@@ -20,7 +20,11 @@ def train_model(Model, data, feature_labels, target_label):
     return model
 
 from sklearn.linear_model import LinearRegression
+import time
+start = time.time()
 model = train_model(LinearRegression, data, FEATURE_LABELS, TARGET_LABEL)
+elapsed = time.time() - start
+print(f"Time={elapsed:.6f} s")
 
 ## Save model
 import pickle

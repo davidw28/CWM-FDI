@@ -33,35 +33,51 @@ def extract_result(result):
 
     ## result.stdout is in the form 'RMSE=0.1027\nPearsonR=0.737\n'
     lines = result.stdout.strip().split() # form ['RMSE=0.1027', 'PearsonR=0.737']
+    time_py = None
     rmse = None
     pearsonr = None
 
     for line in lines:
+        if "Time=" in line:
+            time_py = float(line.lstrip("Time=").rstrip("s"))
         if "RMSE=" in line:
             rmse = float(line.lstrip("RMSE="))
         elif "PearsonR=" in line:
             pearsonr = float(line.lstrip("PearsonR="))
 
-    return time, energy, rmse, pearsonr
+    return time, energy, time_py, rmse, pearsonr
+
+
+def measure_model(train_path, test_path, model_path):
+    results = {}
     
+    print("===TRAINING MODEL===")
+    result = call_python(f"train_model.py {train_path} {model_path}", turbostat = True)
+    time, energy, time_py, _, _ = extract_result(result)
+    results["Training"] = (energy, time_py)
+    print(f"Energy={energy} J Time={time} s Time_py={time_py} s")
+    print()
+    
+    print("===CALLING MODEL (TRAIN) ===")
+    result = call_python(f"call_model_batch.py {train_path} {model_path}", turbostat = True)
+    time, energy, time_py, rmse, pearsonr = extract_result(result)
+    results["Calling (train)"] = (energy, time_py, rmse, pearsonr)
+    print(f"Energy={energy} J Time={time} s Time_py={time_py} s RMSE={rmse} PearsonR={pearsonr}")
+    print()
+    
+    print("===CALLING MODEL (TEST)===")
+    result = call_python(f"call_model_batch.py {test_path} {model_path}", turbostat = True)
+    time, energy, time_py, rmse, pearsonr = extract_result(result)
+    results["Calling (test)"] = (energy, time_py, rmse, pearsonr)
+    print(f"Energy={energy} J Time={time} s Time_py={time_py} s RMSE={rmse} PearsonR={pearsonr}")
+    print()
+
+    return results
+
 OUT_DIR = "data/"
 
-_ = call_python("split_data.py")
-
-print("===TRAINING MODEL===")
-result = call_python("train_model.py data/wine_train.csv models/model_1.pkl", turbostat = True)
-time, energy, _, _ = extract_result(result)
-print(f"Time={time} s Energy={energy} J")
-print()
-
-print("===CALLING MODEL (TRAIN) ===")
-result = call_python("call_model_batch.py data/wine_train.csv models/model_1.pkl", turbostat = True)
-time, energy, rmse, pearsonr = extract_result(result)
-print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
-print()
-
-print("===CALLING MODEL (TEST)===")
-result = call_python("call_model_batch.py data/wine_test.csv models/model_1.pkl", turbostat = True)
-time, energy, rmse, pearsonr = extract_result(result)
-print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
-print()
+TRAIN_PATH = "data/wine_train.csv"
+TEST_PATH = "data/wine_test.csv"
+MODEL_PATH = "models/model_1.pkl"
+results = measure_model(TRAIN_PATH, TEST_PATH, MODEL_PATH)
+print(results)
