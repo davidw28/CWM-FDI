@@ -24,7 +24,7 @@ def extract_result(result):
     ## result.stderr is in the form '1.331949 sec\nPkg_J\n30.90\n'
     lines = result.stderr.strip().split() # form ['1.203377', 'sec', 'Pkg_J', '17.68']
 
-    assert len(lines) == 4
+    assert len(lines) == 4, lines
     assert lines[1] == 'sec'
     assert lines[2] == 'Pkg_J'
     
@@ -52,7 +52,7 @@ def measure_model(train_path, test_path, model_name):
     results = {}
     
     print(f"===TRAINING {model_name.upper()}===")
-    result = call_python(f"train_model.py {train_path} {model_path}", turbostat = True)
+    result = call_python(f"train_{model_name}.py {train_path} {model_path}", turbostat = True)
     time, energy, time_py, _, _ = extract_result(result)
     results["Training"] = (energy, time_py)
     print(f"Energy={energy} J Time={time} s Time_py={time_py} s")
@@ -85,10 +85,10 @@ TEST_PATH = "data/wine_test.csv"
 _ = call_python(f"split_wine_data.py {TRAIN_PATH} {TEST_PATH}")
 
 model_names = (
-    "model01",
-    "model02",
+    "01linear",
+    "02histgradboost",
 )
 
 for model_name in model_names:
     results = measure_model(TRAIN_PATH, TEST_PATH, model_name)
-    write_results(results, "results/wine_{model_name}.txt")
+    write_results(results, f"results/wine_{model_name}.txt")

@@ -1,5 +1,9 @@
-## Load names
 import sys
+import time
+import pickle
+import pandas as pd
+
+## Load names
 assert len(sys.argv) == 3
 IN_PATH = sys.argv[1]
 MODEL_PATH = sys.argv[2]
@@ -9,24 +13,20 @@ TARGET_LABEL = "pH"
 FEATURE_LABELS = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar','chlorides', 'total sulfur dioxide', 'density', 'free sulfur dioxide', 'alcohol', "quality", 'sulphates']
 
 ## Load data
-import pandas as pd
 data = pd.read_csv(IN_PATH)
 total_features = data[FEATURE_LABELS]
+target = data[TARGET_LABEL]
 
-## Train model
-def train_model(Model, data, feature_labels, target_label):
-    model = Model()
-    model.fit(total_features, data[target_label])
-    return model
-
+## MODEL-SPECIFIC
 from sklearn.ensemble import HistGradientBoostingRegressor
-import time
+model = HistGradientBoostingRegressor()
+
+## TRAIN MODEL
 start = time.time()
-model = train_model(HistGradientBoostingRegressor, data, FEATURE_LABELS, TARGET_LABEL)
+model.fit(total_features, target)
 elapsed = time.time() - start
 print(f"Time={elapsed:.6f} s")
 
 ## Save model
-import pickle
 with open(MODEL_PATH, "wb") as f:
     pickle.dump(model, f)
