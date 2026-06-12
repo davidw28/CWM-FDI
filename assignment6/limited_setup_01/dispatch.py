@@ -1,5 +1,7 @@
 import subprocess
 
+PYTHON3 = "/home/ubuntu/CWM-FDI/assignment6/.venv/bin/python3"
+
 def call_python(py_path, turbostat = False, stdout = False, stderr = False):
     cmd = f"{PYTHON3} {py_path}"
     if turbostat:
@@ -34,8 +36,6 @@ def extract_time_energy_RMSE(result):
     
     return time, energy, None
     
-PYTHON3 = "/home/ubuntu/CWM-FDI/assignment6/.venv/bin/python3"
-
 OUT_DIR = "data/"
 
 _ = call_python("split_data.py")
