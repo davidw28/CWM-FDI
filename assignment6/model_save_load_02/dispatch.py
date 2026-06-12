@@ -17,28 +17,45 @@ def call_python(py_path, turbostat = False, stdout = False, stderr = False):
         
     return result
 
-def extract_time_energy_RMSE(result):
+def extract_result(result):
     # stdout contains information printed by run_model.py
     # stderr contains turbostat output
-    # For now, RMSE = None
     
-    """result.stderr is in the form '1.331949 sec\nPkg_J\n30.90\n'"""
-    
-    lines = result.stderr.strip().split()
-    ## This should be in the form ['1.203377', 'sec', 'Pkg_J', '17.68']
-    
+    ## result.stderr is in the form '1.331949 sec\nPkg_J\n30.90\n'
+    lines = result.stderr.strip().split() # form ['1.203377', 'sec', 'Pkg_J', '17.68']
+
     assert len(lines) == 4
     assert lines[1] == 'sec'
     assert lines[2] == 'Pkg_J'
     
     time = float(lines[0])
     energy = float(lines[3])
-    
-    return time, energy, None
+
+    ## result.stdout is in the form 'RMSE=0.1027\nPearsonR=0.737\n'
+    lines = result.stdout.strip().split() # form ['RMSE=0.1027', 'PearsonR=0.737']
+    rmse = None
+    pearsonr = None
+
+    for line in lines:
+        if "RMSE=" in line:
+            rmse = float(line.lstrip("RMSE="))
+        elif "PearsonR=" in line:
+            pearsonr = float(line.lstrip("PearsonR="))
+
+    return time, energy, rmse, pearsonr
     
 OUT_DIR = "data/"
 
+
+
 _ = call_python("split_data.py")
-result = call_python("run_model.py", turbostat = True)
-time, energy, RMSE = extract_time_energy_RMSE(result)
-print(f"Time={time} s Energy={energy} J RMSE = {RMSE}")
+
+print("===TRAINING MODEL===")
+result = call_python("train_model.py", turbostat = True)
+time, energy, rmse, pearsonr = extract_result(result)
+print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
+
+print("===CALLING MODEL (BATCH)===")
+result = call_python("call_model_batch.py", turbostat = True)
+time, energy, rmse, pearsonr = extract_result(result)
+print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
