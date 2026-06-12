@@ -36,8 +36,6 @@ def extract_time_energy_RMSE(result):
     
     return time, energy, None
     
-OUT_DIR = "data/"
-
 _ = call_python("split_data.py")
 result = call_python("run_model.py", turbostat = True)
 time, energy, RMSE = extract_time_energy_RMSE(result)

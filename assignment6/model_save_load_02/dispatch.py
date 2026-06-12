@@ -77,8 +77,6 @@ def write_results(results, out_path):
     with open(out_path, "w") as f:
         print(results, file = f)
 
-OUT_DIR = "data/"
-
 TRAIN_PATH = "data/wine_train.csv"
 TEST_PATH = "data/wine_test.csv"
 _ = call_python(f"split_wine_data.py {TRAIN_PATH} {TEST_PATH}")
