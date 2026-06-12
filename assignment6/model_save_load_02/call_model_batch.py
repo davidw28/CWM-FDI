@@ -1,11 +1,14 @@
-## Hard code parameters for now
-IN_PATH = "data/wine_train.csv"
-MODEL_PATH = "models/model_1.pkl"
+## Load names
+import sys
+assert len(sys.argv) == 3
+IN_PATH = sys.argv[1]
+MODEL_PATH = sys.argv[2]
 
+## Hard code parameters
 TARGET_LABEL = "pH"
 FEATURE_LABELS = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar','chlorides', 'total sulfur dioxide', 'density', 'free sulfur dioxide', 'alcohol', "quality", 'sulphates']
 
-## Load data, not in function for now
+## Load data
 import pandas as pd
 data = pd.read_csv(IN_PATH)
 total_features = data[FEATURE_LABELS]
@@ -15,7 +18,7 @@ import pickle
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
-## Evaluate model, not in separate script for now
+## Evaluate model
 import numpy as np
 import scipy.stats
 

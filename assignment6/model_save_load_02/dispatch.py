@@ -46,16 +46,22 @@ def extract_result(result):
     
 OUT_DIR = "data/"
 
-
-
 _ = call_python("split_data.py")
 
 print("===TRAINING MODEL===")
-result = call_python("train_model.py", turbostat = True)
-time, energy, rmse, pearsonr = extract_result(result)
-print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
+result = call_python("train_model.py data/wine_train.csv models/model_1.pkl", turbostat = True)
+time, energy, _, _ = extract_result(result)
+print(f"Time={time} s Energy={energy} J")
+print()
 
-print("===CALLING MODEL (BATCH)===")
-result = call_python("call_model_batch.py", turbostat = True)
+print("===CALLING MODEL (TRAIN) ===")
+result = call_python("call_model_batch.py data/wine_train.csv models/model_1.pkl", turbostat = True)
 time, energy, rmse, pearsonr = extract_result(result)
 print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
+print()
+
+print("===CALLING MODEL (TEST)===")
+result = call_python("call_model_batch.py data/wine_test.csv models/model_1.pkl", turbostat = True)
+time, energy, rmse, pearsonr = extract_result(result)
+print(f"Time={time} s Energy={energy} J RMSE = {rmse} PearsonR={pearsonr}")
+print()
